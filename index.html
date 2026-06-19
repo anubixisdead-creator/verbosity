@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VERBOSITY Version 4</title>
+<style>
+body{background:#000;color:#fff;font-family:Inter,system-ui,sans-serif;max-width:1100px;margin:auto;padding:20px}
+h1{color:#ff6ec7;text-shadow:0 0 8px rgba(255,110,199,.5);margin-bottom:0}
+.sub{color:#888;margin-top:4px;margin-bottom:20px;font-size:.9rem}
+#words{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}
+.word{background:#111;border:1px solid #222;border-radius:999px;padding:10px 14px;cursor:pointer;text-align:center;word-break:break-word}
+.locked{border-color:#ff6ec7;background:rgba(255,110,199,.12)}
+button{border:0;border-radius:10px;padding:12px 16px;cursor:pointer}
+#inspire{background:#ff6ec7;color:#000;font-weight:bold}
+.controls{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+@media (min-width:700px){#words{grid-template-columns:repeat(4,1fr);}}
+</style>
+
+<link rel="icon" type="image/png" href="web.png">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.png">
+
+
+<link rel="icon" type="image/png" href="web.png">
+<link rel="apple-touch-icon" href="icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="VERBOSITY">
+<link rel="manifest" href="manifest.json">
+
+</head>
+<body>
+<h1>VERBOSITY</h1>
+<div class="sub" id="usage"></div>
+
+<div id="words"></div>
+
+<div class="controls">
+<button id="inspire">✨ INSPIRE</button>
+
+</div>
+
+
+
+<script>
+const WORDS = ["entropy", "gravity", "momentum", "inertia", "friction", "resonance", "orbit", "polarity", "equilibrium", "velocity", "acceleration", "trajectory", "centripetal", "centrifugal", "magnetism", "frequency", "wavelength", "amplitude", "quantum", "singularity", "relativity", "fusion", "fission", "catalyst", "diffusion", "turbulence", "vortex", "spectrum", "pulse", "current", "charge", "field", "radiation", "reflection", "refraction", "vacuum", "ignition", "combustion", "pressure", "tension", "density", "expansion", "contraction", "flux", "symmetry", "asymmetry", "balance", "chaos", "order", "dimension", "transcendence", "duality", "unity", "consciousness", "perception", "illusion", "essence", "destiny", "karma", "fate", "infinity", "eternity", "void", "emergence", "synchronicity", "transformation", "convergence", "divergence", "alignment", "dissonance", "harmony", "vibration", "phase", "transition", "collapse", "cycle", "spiral", "anchor", "drift", "tether", "displacement", "attraction", "repulsion", "decay", "renewal", "ripple", "zenith", "cold", "harsh", "wet", "dry", "damp", "humid", "arid", "icy", "frozen", "frosty", "chilled", "scorching", "blazing", "sweltering", "lukewarm", "crisp", "muggy", "sticky", "slick", "slippery", "rough", "smooth", "coarse", "jagged", "sharp", "blunt", "brittle", "sturdy", "rigid", "flexible", "elastic", "dense", "sparse", "thick", "thin", "heavy", "weightless", "airy", "dusty", "gritty", "sandy", "muddy", "murky", "cloudy", "clear", "transparent", "opaque", "dim", "bright", "glowing", "luminous", "shadowy", "dark", "bleak", "vivid", "faded", "muted", "pale", "stale", "fresh", "pungent", "fragrant", "acrid", "smoky", "metallic", "earthy", "salty", "bitter", "sweet", "sour", "velvety", "silky", "woolly", "fuzzy", "prickly", "spongy", "hollow", "solid", "resonant", "muffled", "piercing", "shrill", "hushed", "thunderous", "turbulent", "stagnant", "volatile", "gentle", "fierce", "savage", "tender", "distant", "intimate", "barren", "fertile", "weathered", "pristine", "tarnished", "raw", "polished", "untamed", "eternal", "electric", "ethereal", "tangible", "visceral", "haunting", "serene", "aching", "spectral", "molten", "crystalline", "windswept", "rain-soaked", "sun-bleached", "smoke-filled", "dew-covered", "stormy", "windless", "cavernous", "suffocating", "expansive", "compressed", "fractured", "seamless", "dormant", "lifeless", "jagged-edged", "threadbare", "rusted", "bruised", "scarred", "untouched", "endless", "weighty", "shimmering", "glistening", "echoing", "silent", "breathless", "overflowing", "parched", "trembling", "drifting", "grounded", "suspended", "unmistakable", "happy", "joyful", "cheerful", "content", "delighted", "ecstatic", "blissful", "elated", "optimistic", "hopeful", "grateful", "fulfilled", "satisfied", "amused", "playful", "carefree", "confident", "proud", "inspired", "passionate", "loving", "affectionate", "empathetic", "kind", "patient", "resilient", "determined", "ambitious", "driven", "focused", "curious", "thoughtful", "reflective", "wise", "humble", "healthy", "energetic", "refreshed", "peaceful", "relaxed", "secure", "relieved", "remorseful", "regretful", "guilty", "ashamed", "embarrassed", "sorrowful", "mournful", "grieving", "heartbroken", "anguished", "devastated", "miserable", "despondent", "hopeless", "lonely", "isolated", "abandoned", "neglected", "rejected", "unloved", "anxious", "nervous", "uneasy", "apprehensive", "fearful", "terrified", "panicked", "overwhelmed", "stressed", "exhausted", "drained", "detached", "withdrawn", "confused", "uncertain", "conflicted", "doubtful", "skeptical", "cynical", "frustrated", "irritated", "annoyed", "resentful", "jealous", "envious", "possessive", "suspicious", "defensive", "hostile", "furious", "enraged", "wrathful", "betrayed", "wounded", "trapped", "lost", "defeated", "broken", "desperate", "yearning", "longing", "nostalgic", "wistful", "sentimental", "enchanted", "captivated", "fascinated", "intrigued", "astonished", "bewildered", "shocked", "awestruck", "humbled", "empowered", "liberated", "enlightened", "transcendent", "authentic", "genuine", "loyal", "devoted", "faithful", "dependable", "charismatic", "introspective", "contemplative", "accepting", "forgiving", "protective", "nurturing", "selfless", "dignified", "graceful", "triumphant", "invincible", "weary", "hardened", "guarded", "reckless", "impulsive", "stubborn", "defiant", "rebellious", "disillusioned", "rejuvenated", "tormented", "cherished", "valued", "understood", "unseen", "alive", "brokenhearted", "wholehearted", "soul-searching", "lovestruck", "grief-stricken", "battle-worn", "clear-minded", "heavy-hearted", "lighthearted", "halcyon", "velvet", "marigold", "sonder", "petrichor", "obsidian", "solstice", "ember", "quasar", "zephyr", "luminary", "moonlit", "cascade", "effervescent", "aurora", "mirage", "reverie", "sonorous", "hush", "tempest", "mosaic", "wanderlust", "saffron", "nocturne", "thistle", "bramble", "shimmer", "honeyed", "murmuration", "cinder", "driftwood", "chrysalis", "afterglow", "lullaby", "twilight", "willow", "sepia", "fable", "glimmer", "opaline", "plume", "alabaster", "cadence", "indigo", "whisper", "meadow", "tidal", "emberglow", "silvered", "dandelion", "moonstone", "ragamuffin", "firefly", "foxglove", "inkling", "spellbound", "wildflower", "gossamer", "enchantment", "sunburst", "riverstone", "briar", "cobblestone", "evermore", "kaleidoscope", "wayward", "serendipity", "moonbeam", "dreamscape", "hushfall", "threnody", "bloom", "juniper", "stardust", "midnight", "flicker", "verdant", "harmonium", "tumbleweed", "rainshadow", "belladonna", "celestial", "nebulous", "starfall", "moonflower", "candlewick", "hearthstone", "twilighted", "bluebird", "softspoken", "wistaria", "cloudburst", "spellcraft", "paperweight", "hummingbird", "rosemary", "ravenous", "wildling", "mothwing", "opalescent", "hushlight", "clementine", "vagabond", "moonrise", "emberfall", "honeycomb", "woodsmoke", "fern", "blackberry", "shoreline", "keepsake", "bittersweet", "sundown", "daydream", "patchwork", "lull", "sunflower", "snowfall", "velvet-dark", "rosewater", "wonderstruck", "nightingale", "lavender", "candlelight", "hearth", "runaway", "tumble", "thimble", "kerosene", "magnolia", "hushabye", "dragonfly", "moonward", "firebrand", "ghostlight", "sundrift", "riverbend", "meadowlark", "cave", "ship", "chariot", "mirror", "bridge", "tower", "garden", "mask", "veil", "throne", "crossroads", "compass", "key", "gate", "path", "ladder", "wheel", "scale", "flame", "river", "mountain", "forest", "desert", "island", "beacon", "thread", "tapestry", "map", "torch", "chain", "lock", "door", "window", "well", "staircase", "abyss", "monolith", "pillar", "fortress", "harbor", "vessel", "sail", "helm", "rudder", "star", "sun", "moon", "pendulum", "circle", "sphere", "triangle", "pyramid", "maze", "arena", "battlefield", "kingdom", "wilderness", "altar", "archive", "manuscript", "codex", "scroll", "sigil", "seal", "quarry", "anvil", "forge", "kiln", "loom", "net", "web", "knot", "root", "branch", "seed", "fruit", "orchard", "fountain", "canyon", "cliff", "tide", "storm", "thunder", "lightning", "dream", "oracle", "riddle", "cipher", "myth", "legend", "prophecy", "pilgrimage", "odyssey", "awakening", "exile", "return", "inheritance", "judgment", "sacrifice", "frontier", "pinnacle", "summit", "underworld", "firmament", "vault", "observatory", "hourglass", "clockwork", "bell", "chalice", "dagger", "sword", "shield", "sceptre", "mantle", "cloak", "monad", "leviathan", "phoenix", "ouroboros", "atlas", "beaconfire", "blacksmith", "cartographer", "gatekeeper", "witness", "pilgrim", "architect", "navigator", "shepherd", "ferryman", "storyteller", "dreamer", "seeker", "guardian", "prophet", "sovereign", "GOUT", "sanctimony", "crucify", "redemption", "salvation", "gospel", "scripture", "sacrament", "confession", "absolution", "communion", "devotion", "worship", "testament", "exodus", "creation", "resurrection", "transfiguration", "temptation", "deliverance", "damnation", "grace", "mercy", "faith", "virtue", "sin", "heresy", "apostasy", "idolatry", "martyr", "martyrdom", "disciple", "apostle", "saint", "messiah", "anoint", "consecrate", "sanctify", "baptize", "ordain", "invoke", "exalt", "glorify", "repent", "atone", "forgive", "absolve", "condemn", "bless", "curse", "preach", "testify", "redeem", "resurrect", "illuminate", "awaken", "convert", "reconcile", "offering", "tithe", "shrine", "sermon", "psalm", "hymn", "litany", "parable", "creed", "doctrine", "dogma", "catechism", "ritual", "rite", "apocalypse", "rapture", "purgatory", "paradise", "inferno", "eden", "trinity", "incarnation", "providence", "divine", "sacred", "holy", "hallowed", "righteous", "virtuous", "sinful", "fallen", "damned", "exalted", "chosen", "elect", "devout", "zealous", "fervent", "reverent", "penitent", "sanctified", "forsaken", "consecrated", "ordained", "omniscient", "omnipotent", "infernal", "miraculous", "prophetic", "apostolic", "messianic", "evangelical", "doctrinal", "sacrificial", "ritualistic", "spiritual", "mystical", "heretical", "converted", "baptized", "anointed", "crucified", "resurrected", "glorified", "purified", "justified", "reconciled", "condemned", "forgiven", "tempted", "tested", "cursed", "idolized", "canonized", "deified", "worshipped", "revered", "venerated", "sanctimonious."];
+const WORD_COUNT = 12;
+
+let current=[];
+let locked=new Set();
+let history=[];
+let seenWords=new Set();
+
+function randomWord(pool){
+ return pool[Math.floor(Math.random()*pool.length)];
+}
+
+function generate(initial=false){
+ const excluded = new Set(history.flat());
+ if(initial){
+   current=[];
+   while(current.length<WORD_COUNT){
+      const w=randomWord(WORDS);
+      if(!current.includes(w)) current.push(w);
+   }
+ } else {
+   for(let i=0;i<WORD_COUNT;i++) {
+      if(!locked.has(i)){
+        const used = new Set(current.filter(Boolean));
+        let pool = WORDS.filter(w => !excluded.has(w) && !used.has(w));
+        if(pool.length===0) pool = WORDS.filter(w => !used.has(w));
+        current[i] = randomWord(pool);
+      }
+   }
+ }
+ current.forEach(w=>seenWords.add(w));
+ history.push([...current]);
+ if(history.length>5) history.shift();
+ updateUsage();
+ render();
+}
+
+
+function updateUsage(){
+ const usage=document.getElementById('usage');
+ if(usage){
+   usage.textContent=`${seenWords.size} of ${WORDS.length} words seen`;
+ }
+}
+
+function render(){
+ const wrap=document.getElementById('words');
+ wrap.innerHTML='';
+ current.forEach((w,i)=>{
+   const el=document.createElement('div');
+   el.className='word'+(locked.has(i)?' locked':'');
+   el.textContent=w + (locked.has(i)?' 🔒':'');
+   el.onclick=()=>{
+      locked.has(i)?locked.delete(i):locked.add(i);
+      render();
+   };
+   wrap.appendChild(el);
+ });
+}
+
+generate(true);
+
+document.getElementById('inspire').onclick=()=>generate();
+
+</script>
+</body>
+</html>
